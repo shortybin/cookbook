@@ -54,5 +54,10 @@
                enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
         </table>
+        <table schema="root" tableName="cook_book_category" domainObjectName="Category"
+               enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>
     </context>
 </generatorConfiguration>
