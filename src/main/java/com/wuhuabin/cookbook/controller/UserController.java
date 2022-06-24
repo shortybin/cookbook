@@ -6,9 +6,9 @@ import com.wuhuabin.cookbook.exception.CookBookException;
 import com.wuhuabin.cookbook.exception.CookBookExceptionEnum;
 import com.wuhuabin.cookbook.model.pojo.User;
 import com.wuhuabin.cookbook.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,11 +20,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/finduser")
-    public User findUser() {
-        return userService.getUser();
-    }
-
+    @ApiOperation("用户注册")
     @PostMapping("/register")
     public ApiRestResponse register(@RequestParam("userName") String userName,
                                     @RequestParam("password") String password) throws CookBookException {
@@ -42,6 +38,7 @@ public class UserController {
         return ApiRestResponse.success();
     }
 
+    @ApiOperation("用户登录")
     @PostMapping("/login")
     public ApiRestResponse login(@RequestParam("userName") String userName,
                                  @RequestParam("password") String password,

@@ -1,6 +1,6 @@
 package com.wuhuabin.cookbook.exception;
 
-public class CookBookException extends Exception {
+public class CookBookException extends RuntimeException {
     private final Integer code;
     private final String message;
 
