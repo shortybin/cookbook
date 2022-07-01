@@ -10,10 +10,12 @@ public enum CookBookExceptionEnum {
     NAME_EXISTED(10004, "不允许重名"),
     INSERT_FAILED(10005, "插入失败，请重试"),
     WRONG_PASSWORD(10006, "密码错误"),
-    NEED_LOGIN(10007,"用户未登录"),
-    NAME_NOT_NULL(10008,"参数不能为空"),
-    CREATE_FAILED(10009,"新增失败"),
-    REQUEST_PARAM_ERROR(10010,"参数错误"),
+    NEED_LOGIN(10007, "用户未登录"),
+    NAME_NOT_NULL(10008, "参数不能为空"),
+    CREATE_FAILED(10009, "新增失败"),
+    REQUEST_PARAM_ERROR(10010, "参数错误"),
+    MKDIR_FAILED(10011, "文件创建失败"),
+    UPLOAD_FAILED(10012, "文件上传失败"),
     SYSTEM_ERROR(20001, "系统异常");
 
     /**
