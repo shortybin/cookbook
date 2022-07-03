@@ -52,7 +52,7 @@ public class UserController {
 
         User user = userService.login(userName, password);
         user.setPassword(null);
-        httpSession.setAttribute(Constant.COOK_BOOK_USER,user);
+        httpSession.setAttribute(Constant.COOK_BOOK_USER, user);
         return ApiRestResponse.success(user);
     }
 }
