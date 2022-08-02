@@ -136,10 +136,10 @@
     <select id="getCategoryListCount" resultType="java.lang.Integer">
         select count(1) from cook_book_category where parent_id = 0
     </select>
-    <select id="getCategoryList" resultType="Category">
+    <select id="getCategoryList" resultType="com.wuhuabin.cookbook.model.pojo.Category">
         select * from cook_book_category where parent_id = 0
     </select>
-    <select id="getChildrenCategoryList" resultType="Category">
+    <select id="getChildrenCategoryList" resultType="com.wuhuabin.cookbook.model.pojo.Category">
         select * from cook_book_category where parent_id = #{id,jdbcType=INTEGER}
     </select>
 </mapper>

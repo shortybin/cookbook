@@ -1,100 +1,118 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wuhuabin.cookbook.model.dao.UserMapper">
-  <resultMap id="BaseResultMap" type="com.wuhuabin.cookbook.model.pojo.Dish">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="image" jdbcType="VARCHAR" property="image" />
-    <result column="detail" jdbcType="VARCHAR" property="detail" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
-    <result column="create_id" jdbcType="INTEGER" property="create_id" />
-  </resultMap>
-  <select id="randomGetDishListCount" resultType="java.lang.Integer">
-        select count(1) from cook_book_dish where examine_status = 2
-  </select>
-  <select id="randomGetDishList" resultType="com.wuhuabin.cookbook.model.pojo.Dish">
-    select * from cook_book_dish where examine_status = 2 ORDER BY RAND() limit #{startNumber},#{pageSize}
-  </select>
-  <select id="getDishListCount" resultType="java.lang.Integer">
-    select count(1)
-    from cook_book_dish_category cbdc
-    left join cook_book_dish cbd on cbd.id = cbdc.dish_id
-    where 1==1
-    <if test="examineStatus != null">
-      and cbd.examine_status = #{examineStatus}
-    </if>
-    <if test="categoryId != null and categoryId != 0">
-      and cbdc.category_id = #{categoryId}
-    </if>
-  </select>
-  <select id="getDishList" resultType="com.wuhuabin.cookbook.model.pojo.Dish">
-    select cbd.*
-    from cook_book_dish_category cbdc
-           left join cook_book_dish cbd on cbd.id = cbdc.dish_id
-    where 1==1
-    <if test="examineStatus != null">
-      and cbd.examine_status = #{examineStatus}
-    </if>
-    <if test="categoryId != null and categoryId != 0">
-      and cbdc.category_id = #{categoryId}
-    </if>
-    order by cbd.id desc
-    limit #{startNumber},#{pageSize}
-  </select>
-  <select id="getDishById" resultType="com.wuhuabin.cookbook.model.pojo.Dish">
-    select * from cook_book_dish where id = #{dishId}
-  </select>
-  <select id="getDishIngredientByDishId" resultType="com.wuhuabin.cookbook.model.pojo.DishIngredient">
-    select * from cook_book_dish_ingredient where dish_id = #{dishId}
-  </select>
-  <select id="getDishStepByDishId" resultType="com.wuhuabin.cookbook.model.pojo.DishStep">
-    select * from cook_book_dish_step where dish_id = #{dishId} order by show_order asc
-  </select>
-  <update id="updateExamineStatus">
-    update cook_book_dish set examine_status = #{examineStatus} where id = #{dishId}
-  </update>
-  <insert id="saveDish" useGeneratedKeys="true" keyProperty="id">
-    insert into cook_book_dish(name,image,detail,examine_status,create_id)
-    values(#{dishId.name},#{dishId.image},#{dishId.detail},#{dishId.examine_status},#{dishId.create_id})
-  </insert>
-  <insert id="saveDishIngredient">
-    insert into cook_book_dish_ingredient(dish_id,ingredient_name,ingredient_dosage)
-    values
-    <foreach collection="dishIngredientList" item="dishIngredient" open="" close="" index="index" separator=",">
-      (#{dishIngredient.dish_id},#{dishIngredient.ingredient_name},#{dishIngredient.ingredient_dosage})
-    </foreach>
-  </insert>
-  <insert id="saveDishStep">
-    insert into cook_book_dish_step(dish_id,content,show_order)
-    values
-    <foreach collection="dishStepList" item="dishStep" open="" close="" index="index" separator=",">
-    (#{dishStep.dish_id},#{dishStep.content},#{dishStep.show_order})
-    </foreach>
-  </insert>
-  <update id="updateDish">
-    update cook_book_dish set update_time = now()
-    <if test="name != null and name != ''">
-        , name = #{name}
-    </if>
-    <if test="image != null and image != ''">
-      , image = #{image}
-    </if>
-    <if test="detail != null and detail != ''">
-      , detail = #{detail}
-    </if>
-    <if test="examine_status != null and examine_status != ''">
-      , examine_status = #{examine_status}
-    </if>
-    <if test="create_id != null and create_id != ''">
-      , create_id = #{create_id}
-    </if>
-    where id = #{id}
-  </update>
-  <delete id="deleteDishIngredientByDishId">
-    delete from cook_book_dish_ingredient where dish_id = #{dishId}
-  </delete>
-  <delete id="deleteDishStepByDishId">
-    delete from cook_book_dish_step where dish_id = #{dishId}
-  </delete>
+<mapper namespace="com.wuhuabin.cookbook.model.dao.DishMapper">
+    <resultMap id="BaseResultMap" type="com.wuhuabin.cookbook.model.pojo.Dish">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="image" jdbcType="VARCHAR" property="image"/>
+        <result column="detail" jdbcType="VARCHAR" property="detail"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="create_time"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="update_time"/>
+        <result column="create_id" jdbcType="INTEGER" property="create_id"/>
+    </resultMap>
+    <select id="randomGetDishListCount" resultType="java.lang.Integer">
+        select count(1)
+        from cook_book_dish
+        where examine_status = 2
+    </select>
+    <select id="randomGetDishList" resultType="com.wuhuabin.cookbook.model.pojo.Dish">
+        select *
+        from cook_book_dish
+        where examine_status = 2
+        ORDER BY RAND() limit #{startNumber}, #{pageSize}
+    </select>
+    <select id="getDishListCount" resultType="java.lang.Integer">
+        select count(1)
+        from cook_book_dish_category cbdc
+        left join cook_book_dish cbd on cbd.id = cbdc.dish_id
+        where 1==1
+        <if test="examineStatus != null">
+            and cbd.examine_status = #{examineStatus}
+        </if>
+        <if test="categoryId != null and categoryId != 0">
+            and cbdc.category_id = #{categoryId}
+        </if>
+    </select>
+    <select id="getDishList" resultType="com.wuhuabin.cookbook.model.pojo.Dish">
+        select cbd.*
+        from cook_book_dish_category cbdc
+        left join cook_book_dish cbd on cbd.id = cbdc.dish_id
+        where 1==1
+        <if test="examineStatus != null">
+            and cbd.examine_status = #{examineStatus}
+        </if>
+        <if test="categoryId != null and categoryId != 0">
+            and cbdc.category_id = #{categoryId}
+        </if>
+        order by cbd.id desc
+        limit #{startNumber},#{pageSize}
+    </select>
+    <select id="getDishById" resultType="com.wuhuabin.cookbook.model.pojo.Dish">
+        select *
+        from cook_book_dish
+        where id = #{dishId}
+    </select>
+    <select id="getDishIngredientByDishId" resultType="com.wuhuabin.cookbook.model.pojo.DishIngredient">
+        select *
+        from cook_book_dish_ingredient
+        where dish_id = #{dishId}
+    </select>
+    <select id="getDishStepByDishId" resultType="com.wuhuabin.cookbook.model.pojo.DishStep">
+        select *
+        from cook_book_dish_step
+        where dish_id = #{dishId}
+        order by show_order asc
+    </select>
+    <update id="updateExamineStatus">
+        update cook_book_dish
+        set examine_status = #{examineStatus}
+        where id = #{dishId}
+    </update>
+    <insert id="saveDish" useGeneratedKeys="true" keyProperty="id">
+        insert into cook_book_dish(name, image, detail, examine_status, create_id)
+        values (#{dishId.name}, #{dishId.image}, #{dishId.detail}, #{dishId.examine_status}, #{dishId.create_id})
+    </insert>
+    <insert id="saveDishIngredient">
+        insert into cook_book_dish_ingredient(dish_id,ingredient_name,ingredient_dosage)
+        values
+        <foreach collection="dishIngredientList" item="dishIngredient" open="" close="" index="index" separator=",">
+            (#{dishIngredient.dish_id},#{dishIngredient.ingredient_name},#{dishIngredient.ingredient_dosage})
+        </foreach>
+    </insert>
+    <insert id="saveDishStep">
+        insert into cook_book_dish_step(dish_id,content,show_order)
+        values
+        <foreach collection="dishStepList" item="dishStep" open="" close="" index="index" separator=",">
+            (#{dishStep.dish_id},#{dishStep.content},#{dishStep.show_order})
+        </foreach>
+    </insert>
+    <update id="updateDish">
+        update cook_book_dish set update_time = now()
+        <if test="name != null and name != ''">
+            , name = #{name}
+        </if>
+        <if test="image != null and image != ''">
+            , image = #{image}
+        </if>
+        <if test="detail != null and detail != ''">
+            , detail = #{detail}
+        </if>
+        <if test="examine_status != null and examine_status != ''">
+            , examine_status = #{examine_status}
+        </if>
+        <if test="create_id != null and create_id != ''">
+            , create_id = #{create_id}
+        </if>
+        where id = #{id}
+    </update>
+    <delete id="deleteDishIngredientByDishId">
+        delete
+        from cook_book_dish_ingredient
+        where dish_id = #{dishId}
+    </delete>
+    <delete id="deleteDishStepByDishId">
+        delete
+        from cook_book_dish_step
+        where dish_id = #{dishId}
+    </delete>
 </mapper>
