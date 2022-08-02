@@ -23,13 +23,12 @@ public class CategoryController {
 
     @ApiOperation("获取分类列表")
     @GetMapping("/category/getCategoryList")
-    public ApiRestResponse categoryList1(@RequestParam("pageNum") Integer pageNum,
-                                         @RequestParam("pageSize") Integer pageSize) {
-        Integer total  = categoryService.getCategoryListCount();
+    public ApiRestResponse categoryList() {
+        Integer total = categoryService.getCategoryListCount();
         List<Category> categoryList = new ArrayList<>();
-        if(total > 0 ){
-            categoryList = categoryService.getCategoryList(pageNum, pageSize);
+        if (total > 0) {
+            categoryList = categoryService.getCategoryList();
         }
-        return ApiRestResponse.success(categoryList,total,pageNum,pageSize);
+        return ApiRestResponse.success(categoryList);
     }
 }

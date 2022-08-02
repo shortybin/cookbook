@@ -22,19 +22,15 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
     @Autowired
     CategoryMapper categoryMapper;
+
     @Override
-    public Integer getCategoryListCount(){
+    public Integer getCategoryListCount() {
         return categoryMapper.getCategoryListCount();
     }
 
     @Override
-    public List<Category> getCategoryList(Integer pageNum, Integer pageSize) {
-        List<Category> categoryList = categoryMapper.getCategoryList((pageNum-1)*pageSize,pageSize);
-        for(Category category : categoryList){
-            List<Category> childrenCategoryList = categoryMapper.getChildrenCategoryList(category.getId());
-            category.setChildrenCategoryList(childrenCategoryList);
-        }
+    public List<Category> getCategoryList() {
+        List<Category> categoryList = categoryMapper.selectList();
         return categoryList;
-
     }
 }

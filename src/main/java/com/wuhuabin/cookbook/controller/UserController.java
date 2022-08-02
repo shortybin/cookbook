@@ -35,7 +35,7 @@ public class UserController {
         }
 
         userService.register(userName, password);
-        return ApiRestResponse.success();
+        return ApiRestResponse.success("注册成功");
     }
 
     @ApiOperation("用户登录")
@@ -67,7 +67,7 @@ public class UserController {
         }
         int count = userService.changePassword(userId, confirmPassword);
         if (count > 0) {
-            return ApiRestResponse.success();
+            return ApiRestResponse.success("密码修改成功，请重新登录");
         }
         return ApiRestResponse.error(0, "修改密码失败！");
     }

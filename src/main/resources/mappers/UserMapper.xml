@@ -118,7 +118,7 @@
   </select>
   <update id="updatePassword" parameterType="com.wuhuabin.cookbook.model.pojo.User">
     update cook_book_user
-    set `password` = #{password,jdbcType=VARCHAR},
+    set `password` = #{password,jdbcType=VARCHAR}
     where userid = #{userid,jdbcType=INTEGER}
   </update>
 </mapper>

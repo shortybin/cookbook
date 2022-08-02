@@ -11,5 +11,5 @@ public interface CategoryService {
 
     Integer getCategoryListCount();
 
-    List<Category> getCategoryList(Integer pageNum, Integer pageSize);
+    List<Category> getCategoryList();
 }

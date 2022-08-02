@@ -45,6 +45,11 @@ public class UserServiceImpl implements UserService {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+        User userByName = userMapper.selectByName(userName);
+        if (userByName == null) {
+            throw new CookBookException(CookBookExceptionEnum.USER_NOT_EXIST);
+        }
+
         User user = userMapper.selectLogin(userName, md5Password);
         if (user == null) {
             throw new CookBookException(CookBookExceptionEnum.WRONG_PASSWORD);
