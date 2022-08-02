@@ -2,6 +2,7 @@ package com.wuhuabin.cookbook.common;
 
 
 import com.wuhuabin.cookbook.exception.CookBookExceptionEnum;
+import io.swagger.models.auth.In;
 
 /**
  * 描述：   API统一（通用）返回对象；
@@ -10,8 +11,11 @@ public class ApiRestResponse<T> {
     private Integer status;//状态码
     private String msg;//描述信息
     private T data;//接口返回的数据
+    private Integer total;
+    private Integer pageNumber;
+    private Integer pageSize;
 
-    private static final int OK_CODE = 10000;
+    private static final int OK_CODE = 200;
     private static final String OK_MSG = "SUCCESS";
 
     public ApiRestResponse(Integer status, String msg, T data) {
@@ -23,6 +27,15 @@ public class ApiRestResponse<T> {
     public ApiRestResponse(Integer status, String msg) {
         this.status = status;
         this.msg = msg;
+    }
+
+    public ApiRestResponse(Integer status, String msg, T data,Integer total,Integer pageNumber,Integer pageSize) {
+        this.status = status;
+        this.msg = msg;
+        this.data = data;
+        this.total = total;
+        this.pageNumber = pageNumber;
+        this.pageSize = pageSize;
     }
 
     public ApiRestResponse() {
@@ -49,6 +62,22 @@ public class ApiRestResponse<T> {
     public static <T> ApiRestResponse<T> success(T result) {
         ApiRestResponse<T> response = new ApiRestResponse<>();
         response.setData(result);
+        return response;
+    }
+
+    /**
+     * 处理成功，而且接口返回了数据（即，data是有数据的）；
+     *
+     * @param result
+     * @param <T>
+     * @return
+     */
+    public static <T> ApiRestResponse<T> success(T result, Integer total, Integer pageNumber,Integer pageSize) {
+        ApiRestResponse<T> response = new ApiRestResponse<>();
+        response.setData(result);
+        response.setTotal(total);
+        response.setPageNumber(pageNumber);
+        response.setPageSize(pageSize);
         return response;
     }
 
@@ -107,6 +136,31 @@ public class ApiRestResponse<T> {
     public static String getOkMeg() {
         return OK_MSG;
     }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
+    public Integer getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(Integer pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
 
     @Override
     public String toString() {

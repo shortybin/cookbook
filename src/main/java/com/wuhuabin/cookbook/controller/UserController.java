@@ -21,7 +21,7 @@ public class UserController {
     UserService userService;
 
     @ApiOperation("用户注册")
-    @PostMapping("/register")
+    @PostMapping("/user/register")
     public ApiRestResponse register(@RequestParam("userName") String userName,
                                     @RequestParam("password") String password) throws CookBookException {
         if (!StringUtils.hasText(userName)) {
@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @ApiOperation("用户登录")
-    @PostMapping("/login")
+    @PostMapping("/user/login")
     public ApiRestResponse login(@RequestParam("userName") String userName,
                                  @RequestParam("password") String password,
                                  HttpSession httpSession) throws CookBookException {
@@ -54,5 +54,23 @@ public class UserController {
         user.setPassword(null);
         httpSession.setAttribute(Constant.COOK_BOOK_USER,user);
         return ApiRestResponse.success(user);
+    }
+
+    @ApiOperation("修改密码")
+    @PostMapping("/user/changePassword")
+    public ApiRestResponse changePassword(@RequestParam("userId") Integer userId,
+                                 @RequestParam("password") String password,
+                                          @RequestParam("confirmPassword") String confirmPassword) throws CookBookException {
+        if (!StringUtils.hasText(password)) {
+            return ApiRestResponse.error(CookBookExceptionEnum.NEED_PASSWORD);
+        }
+        if(!password.equals(confirmPassword)){
+            return ApiRestResponse.error(0,"两次输入的密码不一致！");
+        }
+        int count= userService.changePassword(userId, confirmPassword);
+        if(count > 0){
+            return ApiRestResponse.success();
+        }
+        return ApiRestResponse.error(0,"修改密码失败！");
     }
 }

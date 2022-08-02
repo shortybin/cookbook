@@ -1,6 +1,7 @@
 package com.wuhuabin.cookbook.model.dao;
 
 import com.wuhuabin.cookbook.model.pojo.Category;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -25,4 +26,10 @@ public interface CategoryMapper {
     List<Category> selectList();
 
     List<Category> selectCategoriesByParentId(Integer parentId);
+
+    Integer getCategoryListCount();
+
+    List<Category> getCategoryList(@Param("pageStart")Integer pageStart,@Param("pageSize") Integer pageSize);
+
+    List<Category> getChildrenCategoryList(@Param("id")Integer id);
 }

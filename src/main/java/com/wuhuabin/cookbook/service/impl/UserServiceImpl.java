@@ -51,4 +51,17 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
+
+    @Override
+    public Integer changePassword(Integer userId, String password) throws CookBookException {
+        try {
+            User user = new User();
+            user.setUserid(userId);
+            user.setPassword(MD5Utils.getMD5String(password));
+            return userMapper.updatePassword(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CookBookException(CookBookExceptionEnum.INSERT_FAILED);
+        }
+    }
 }

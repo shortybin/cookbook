@@ -133,4 +133,13 @@
         from cook_book_category
         where parent_id=#{parentId}
     </select>
+    <select id="getCategoryListCount" resultType="java.lang.Integer">
+        select count(1) from cook_book_category where parent_id = 0
+    </select>
+    <select id="getCategoryList" resultType="Category">
+        select * from cook_book_category where parent_id = 0
+    </select>
+    <select id="getChildrenCategoryList" resultType="Category">
+        select * from cook_book_category where parent_id = #{id,jdbcType=INTEGER}
+    </select>
 </mapper>
