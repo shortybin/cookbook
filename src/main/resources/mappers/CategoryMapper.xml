@@ -4,7 +4,6 @@
     <resultMap id="BaseResultMap" type="com.wuhuabin.cookbook.model.pojo.Category">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="type" jdbcType="INTEGER" property="type"/>
         <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
         <result column="order_num" jdbcType="INTEGER" property="orderNum"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
@@ -12,7 +11,7 @@
     </resultMap>
     <sql id="Base_Column_List">
         id
-        , `name`, `type`, parent_id, order_num, create_time, update_time
+        , `name`, parent_id, order_num, create_time, update_time
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -26,10 +25,10 @@
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.wuhuabin.cookbook.model.pojo.Category">
-        insert into cook_book_category (id, `name`, `type`,
+        insert into cook_book_category (id, `name`,
                                         parent_id, order_num, create_time,
                                         update_time)
-        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},
+        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
                 #{parentId,jdbcType=INTEGER}, #{orderNum,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
                 #{updateTime,jdbcType=TIMESTAMP})
     </insert>
@@ -41,9 +40,6 @@
             </if>
             <if test="name != null">
                 `name`,
-            </if>
-            <if test="type != null">
-                `type`,
             </if>
             <if test="parentId != null">
                 parent_id,
@@ -65,9 +61,6 @@
             <if test="name != null">
                 #{name,jdbcType=VARCHAR},
             </if>
-            <if test="type != null">
-                #{type,jdbcType=INTEGER},
-            </if>
             <if test="parentId != null">
                 #{parentId,jdbcType=INTEGER},
             </if>
@@ -88,9 +81,6 @@
             <if test="name != null">
                 `name` = #{name,jdbcType=VARCHAR},
             </if>
-            <if test="type != null">
-                `type` = #{type,jdbcType=INTEGER},
-            </if>
             <if test="parentId != null">
                 parent_id = #{parentId,jdbcType=INTEGER},
             </if>
@@ -109,7 +99,6 @@
     <update id="updateByPrimaryKey" parameterType="com.wuhuabin.cookbook.model.pojo.Category">
         update cook_book_category
         set `name`      = #{name,jdbcType=VARCHAR},
-            `type`      = #{type,jdbcType=INTEGER},
             parent_id   = #{parentId,jdbcType=INTEGER},
             order_num   = #{orderNum,jdbcType=INTEGER},
             create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -132,5 +121,19 @@
         <include refid="Base_Column_List"/>
         from cook_book_category
         where parent_id=#{parentId}
+    </select>
+    <select id="getCategoryListCount" resultType="java.lang.Integer">
+        select count(1)
+        from cook_book_category
+    </select>
+    <select id="getCategoryList" resultType="com.wuhuabin.cookbook.model.pojo.Category">
+        select *
+        from cook_book_category
+        where parent_id = 0
+    </select>
+    <select id="getChildrenCategoryList" resultType="com.wuhuabin.cookbook.model.pojo.Category">
+        select *
+        from cook_book_category
+        where parent_id = #{id,jdbcType=INTEGER}
     </select>
 </mapper>

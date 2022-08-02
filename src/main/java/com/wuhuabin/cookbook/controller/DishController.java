@@ -4,6 +4,10 @@ import com.wuhuabin.cookbook.common.ApiRestResponse;
 import com.wuhuabin.cookbook.common.Constant;
 import com.wuhuabin.cookbook.exception.CookBookException;
 import com.wuhuabin.cookbook.exception.CookBookExceptionEnum;
+import com.wuhuabin.cookbook.model.pojo.Category;
+import com.wuhuabin.cookbook.model.pojo.Dish;
+import com.wuhuabin.cookbook.service.DishService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,12 +18,23 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
 public class DishController {
+    @Autowired
+    private DishService dishService;
 
-    @PostMapping("/upload/file")
+    /**
+     * 上传文件
+     *
+     * @param httpServletRequest
+     * @param file
+     * @return
+     */
+    @PostMapping("/dish/uploadFile")
     public ApiRestResponse upload(HttpServletRequest httpServletRequest, @RequestParam("file") MultipartFile file) {
         //获取文件的原始名字
         String fileName = file.getOriginalFilename();
@@ -77,4 +92,76 @@ public class DishController {
         }
         return effectiveURI;
     }
+
+    /**
+     * 随机获取菜单列表
+     */
+    @PostMapping("/dish/randomGetDishList")
+    public ApiRestResponse randomGetDishList(@RequestParam("pageNum") Integer pageNum,
+                                             @RequestParam("pageSize") Integer pageSize) {
+        Integer total = dishService.randomGetDishListCount(pageNum, pageSize);
+        List<Category> categoryList = new ArrayList<>();
+        if (total > 0) {
+            categoryList = dishService.randomGetDishList(pageNum, pageSize);
+        }
+        return ApiRestResponse.success(categoryList, total, pageNum, pageSize);
+    }
+
+    /**
+     * 获取菜列表
+     */
+    @PostMapping("/dish/getDishList")
+    public ApiRestResponse getDishList(@RequestParam("categoryId") Integer categoryId,
+                                       @RequestParam("examineStatus") Integer examineStatus,
+                                       @RequestParam("pageNum") Integer pageNum,
+                                       @RequestParam("pageSize") Integer pageSize) {
+        Integer total = dishService.getDishListCount(categoryId, examineStatus, pageNum, pageSize);
+        List<Category> categoryList = new ArrayList<>();
+        if (total > 0) {
+            categoryList = dishService.getDishList(categoryId, examineStatus, pageNum, pageSize);
+        }
+        return ApiRestResponse.success(categoryList, total, pageNum, pageSize);
+    }
+
+    /**
+     * 获取菜谱详情
+     */
+    @PostMapping("/dish/getDishDetail")
+    public ApiRestResponse getDishDetail(@RequestParam("dishId") Integer dishId) {
+        Dish dish = dishService.getDishDetail(dishId);
+        return ApiRestResponse.success(dish);
+    }
+
+
+    /**
+     * 更新审核状态
+     */
+    @PostMapping("/dish/updateExamineStatus")
+    public ApiRestResponse updateExamineStatus(@RequestParam("dishId") Integer dishId,
+                                               @RequestParam("examineStatus") Integer examineStatus) {
+        Boolean isSuccess = dishService.updateExamineStatus(dishId, examineStatus);
+        if (isSuccess) {
+            return ApiRestResponse.success();
+        }
+        return ApiRestResponse.error(0, "更新失败！");
+    }
+
+
+    /**
+     * 保存或更新菜谱
+     *
+     * @param dishJson 菜谱json(格式：{})
+     */
+    @PostMapping("/dish/saveOrUpdateDish")
+    public ApiRestResponse saveOrUpdateDish(@RequestParam("dishJson") String dishJson,
+                                            @RequestParam("dishIngredientJson") String dishIngredientJson,
+                                            @RequestParam("dishStepJson") String dishStepJson) {
+        Boolean isSuccess = dishService.saveOrUpdateDish(dishJson, dishIngredientJson, dishStepJson);
+        if (isSuccess) {
+            return ApiRestResponse.success();
+        }
+        return ApiRestResponse.error(0, "保存失败！");
+    }
+
+
 }

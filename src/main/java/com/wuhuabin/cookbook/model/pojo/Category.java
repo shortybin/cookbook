@@ -1,13 +1,12 @@
 package com.wuhuabin.cookbook.model.pojo;
 
 import java.util.Date;
+import java.util.List;
 
 public class Category {
     private Integer id;
 
     private String name;
-
-    private Integer type;
 
     private Integer parentId;
 
@@ -16,6 +15,8 @@ public class Category {
     private Date createTime;
 
     private Date updateTime;
+
+    private List<Category> childrenCategoryList;
 
     public Integer getId() {
         return id;
@@ -31,14 +32,6 @@ public class Category {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
     }
 
     public Integer getParentId() {
@@ -71,5 +64,13 @@ public class Category {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public List<Category> getChildrenCategoryList() {
+        return childrenCategoryList;
+    }
+
+    public void setChildrenCategoryList(List<Category> childrenCategoryList) {
+        this.childrenCategoryList = childrenCategoryList;
     }
 }

@@ -45,10 +45,28 @@ public class UserServiceImpl implements UserService {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+        User userByName = userMapper.selectByName(userName);
+        if (userByName == null) {
+            throw new CookBookException(CookBookExceptionEnum.USER_NOT_EXIST);
+        }
+
         User user = userMapper.selectLogin(userName, md5Password);
         if (user == null) {
             throw new CookBookException(CookBookExceptionEnum.WRONG_PASSWORD);
         }
         return user;
+    }
+
+    @Override
+    public Integer changePassword(Integer userId, String password) throws CookBookException {
+        try {
+            User user = new User();
+            user.setUserid(userId);
+            user.setPassword(MD5Utils.getMD5String(password));
+            return userMapper.updatePassword(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CookBookException(CookBookExceptionEnum.INSERT_FAILED);
+        }
     }
 }

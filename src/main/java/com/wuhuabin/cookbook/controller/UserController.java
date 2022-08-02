@@ -21,7 +21,7 @@ public class UserController {
     UserService userService;
 
     @ApiOperation("用户注册")
-    @PostMapping("/register")
+    @PostMapping("/user/register")
     public ApiRestResponse register(@RequestParam("userName") String userName,
                                     @RequestParam("password") String password) throws CookBookException {
         if (!StringUtils.hasText(userName)) {
@@ -30,19 +30,18 @@ public class UserController {
         if (!StringUtils.hasText(password)) {
             return ApiRestResponse.error(CookBookExceptionEnum.NEED_PASSWORD);
         }
-        if (password.length() < 6) {//如果密码长度小于6位，直接返回密码长度不能小于8位的信息；
+        if (password.length() < 6) {//如果密码长度小于6位，直接返回密码长度不能小于6位的信息；
             return ApiRestResponse.error(CookBookExceptionEnum.PASSWORD_TOO_SHORT);
         }
 
         userService.register(userName, password);
-        return ApiRestResponse.success();
+        return ApiRestResponse.success("注册成功");
     }
 
     @ApiOperation("用户登录")
-    @PostMapping("/login")
+    @PostMapping("/user/login")
     public ApiRestResponse login(@RequestParam("userName") String userName,
-                                 @RequestParam("password") String password,
-                                 HttpSession httpSession) throws CookBookException {
+                                 @RequestParam("password") String password) throws CookBookException {
         if (!StringUtils.hasText(userName)) {
             return ApiRestResponse.error(CookBookExceptionEnum.NEED_USER_NAME);
         }
@@ -52,7 +51,24 @@ public class UserController {
 
         User user = userService.login(userName, password);
         user.setPassword(null);
-        httpSession.setAttribute(Constant.COOK_BOOK_USER, user);
         return ApiRestResponse.success(user);
+    }
+
+    @ApiOperation("修改密码")
+    @PostMapping("/user/changePassword")
+    public ApiRestResponse changePassword(@RequestParam("userId") Integer userId,
+                                          @RequestParam("password") String password,
+                                          @RequestParam("confirmPassword") String confirmPassword) throws CookBookException {
+        if (!StringUtils.hasText(password)) {
+            return ApiRestResponse.error(CookBookExceptionEnum.NEED_PASSWORD);
+        }
+        if (!password.equals(confirmPassword)) {
+            return ApiRestResponse.error(0, "两次输入的密码不一致！");
+        }
+        int count = userService.changePassword(userId, confirmPassword);
+        if (count > 0) {
+            return ApiRestResponse.success("密码修改成功，请重新登录");
+        }
+        return ApiRestResponse.error(0, "修改密码失败！");
     }
 }
