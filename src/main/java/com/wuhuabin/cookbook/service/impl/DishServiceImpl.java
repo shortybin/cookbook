@@ -27,7 +27,7 @@ public class DishServiceImpl implements DishService {
     }
 
 
-    public List<Category> randomGetDishList(Integer pageNum, Integer pageSize) {
+    public List<Dish> randomGetDishList(Integer pageNum, Integer pageSize) {
         return dishMapper.randomGetDishList((pageNum - 1) * pageSize, pageSize);
     }
 
@@ -36,7 +36,7 @@ public class DishServiceImpl implements DishService {
     }
 
 
-    public List<Category> getDishList(Integer categoryId, Integer examineStatus, Integer pageNum, Integer pageSize) {
+    public List<Dish> getDishList(Integer categoryId, Integer examineStatus, Integer pageNum, Integer pageSize) {
         return dishMapper.getDishList(categoryId, examineStatus, (pageNum - 1) * pageSize, pageSize);
     }
 
@@ -63,7 +63,7 @@ public class DishServiceImpl implements DishService {
         Dish dish = JSON.parseObject(dishJson, Dish.class);
         List<DishIngredient> dishIngredientList = JSON.parseArray(dishIngredientJson, DishIngredient.class);
         List<DishStep> dishStepList = JSON.parseArray(dishStepJson, DishStep.class);
-        if (dish.getId() != null) {
+        if (dish.getId() == null) {
             // 新增
             int dishCount = dishMapper.saveDish(dish);
             for (DishIngredient dishIngredient : dishIngredientList) {

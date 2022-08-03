@@ -25,7 +25,7 @@
         select count(1)
         from cook_book_dish_category cbdc
         left join cook_book_dish cbd on cbd.id = cbdc.dish_id
-        where 1==1
+        where 1=1
         <if test="examineStatus != null">
             and cbd.examine_status = #{examineStatus}
         </if>
@@ -37,7 +37,7 @@
         select cbd.*
         from cook_book_dish_category cbdc
         left join cook_book_dish cbd on cbd.id = cbdc.dish_id
-        where 1==1
+        where 1=1
         <if test="examineStatus != null">
             and cbd.examine_status = #{examineStatus}
         </if>

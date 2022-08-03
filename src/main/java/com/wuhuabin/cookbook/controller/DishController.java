@@ -100,27 +100,26 @@ public class DishController {
     public ApiRestResponse randomGetDishList(@RequestParam("pageNum") Integer pageNum,
                                              @RequestParam("pageSize") Integer pageSize) {
         Integer total = dishService.randomGetDishListCount(pageNum, pageSize);
-        List<Category> categoryList = new ArrayList<>();
+        List<Dish> dishList = new ArrayList<>();
         if (total > 0) {
-            categoryList = dishService.randomGetDishList(pageNum, pageSize);
+            dishList = dishService.randomGetDishList(pageNum, pageSize);
         }
-        return ApiRestResponse.success(categoryList, total, pageNum, pageSize);
+        return ApiRestResponse.success(dishList, total, pageNum, pageSize);
     }
 
     /**
-     * 获取菜列表
+     * 获取分类菜谱下的列表
      */
     @PostMapping("/dish/getDishList")
     public ApiRestResponse getDishList(@RequestParam("categoryId") Integer categoryId,
-                                       @RequestParam("examineStatus") Integer examineStatus,
                                        @RequestParam("pageNum") Integer pageNum,
                                        @RequestParam("pageSize") Integer pageSize) {
-        Integer total = dishService.getDishListCount(categoryId, examineStatus, pageNum, pageSize);
-        List<Category> categoryList = new ArrayList<>();
+        Integer total = dishService.getDishListCount(categoryId, 2, pageNum, pageSize);
+        List<Dish> dishList = new ArrayList<>();
         if (total > 0) {
-            categoryList = dishService.getDishList(categoryId, examineStatus, pageNum, pageSize);
+            dishList = dishService.getDishList(categoryId, 2, pageNum, pageSize);
         }
-        return ApiRestResponse.success(categoryList, total, pageNum, pageSize);
+        return ApiRestResponse.success(dishList, total, pageNum, pageSize);
     }
 
     /**
