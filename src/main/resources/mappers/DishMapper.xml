@@ -23,26 +23,32 @@
     </select>
     <select id="getDishListCount" resultType="java.lang.Integer">
         select count(1)
-        from cook_book_dish_category cbdc
-        left join cook_book_dish cbd on cbd.id = cbdc.dish_id
+        from cook_book_dish cbd
+        left join cook_book_dish_category cbdc on cbd.id = cbdc.dish_id
         where 1=1
         <if test="examineStatus != null">
             and cbd.examine_status = #{examineStatus}
         </if>
         <if test="categoryId != null and categoryId != 0">
             and cbdc.category_id = #{categoryId}
+        </if>
+        <if test="content != null and content != ''">
+            and cbd.name like concat('%',#{content},'%')
         </if>
     </select>
     <select id="getDishList" resultType="com.wuhuabin.cookbook.model.pojo.Dish">
         select cbd.*
-        from cook_book_dish_category cbdc
-        left join cook_book_dish cbd on cbd.id = cbdc.dish_id
+        from cook_book_dish cbd
+        left join cook_book_dish_category cbdc on cbd.id = cbdc.dish_id
         where 1=1
         <if test="examineStatus != null">
             and cbd.examine_status = #{examineStatus}
         </if>
         <if test="categoryId != null and categoryId != 0">
             and cbdc.category_id = #{categoryId}
+        </if>
+        <if test="content != null and content != ''">
+            and cbd.name like concat('%',#{content},'%')
         </if>
         order by cbd.id desc
         limit #{startNumber},#{pageSize}
@@ -86,6 +92,13 @@
             (#{dishStep.dish_id},#{dishStep.content},#{dishStep.show_order})
         </foreach>
     </insert>
+    <insert id="saveCategory">
+        insert into cook_book_dish_category(dish_id,category_id)
+        values
+        <foreach collection="categoryIdList" item="categoryId" open="" close="" index="index" separator=",">
+            (#{dishId},#{categoryId})
+        </foreach>
+    </insert>
     <update id="updateDish">
         update cook_book_dish set update_time = now()
         <if test="name != null and name != ''">
@@ -113,6 +126,11 @@
     <delete id="deleteDishStepByDishId">
         delete
         from cook_book_dish_step
+        where dish_id = #{dishId}
+    </delete>
+    <delete id="deleteDishCategoryByDishId">
+        delete
+        from cook_book_dish_category
         where dish_id = #{dishId}
     </delete>
 </mapper>

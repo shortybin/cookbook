@@ -10,9 +10,11 @@ public interface DishService {
 
     List<Dish> randomGetDishList(Integer pageNum, Integer pageSize);
 
-    Integer getDishListCount(Integer categoryId, Integer examineStatus, Integer pageNum, Integer pageSize);
+    Integer getDishListCount(Integer categoryId, Integer examineStatus,
+                             Integer pageNum, Integer pageSize, String content);
 
-    List<Dish> getDishList(Integer categoryId, Integer examineStatus, Integer pageNum, Integer pageSize);
+    List<Dish> getDishList(Integer categoryId, Integer examineStatus,
+                           Integer pageNum, Integer pageSize, String content);
 
     Dish getDishDetail(Integer dishId);
 

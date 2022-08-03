@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -31,13 +32,13 @@ public class DishServiceImpl implements DishService {
         return dishMapper.randomGetDishList((pageNum - 1) * pageSize, pageSize);
     }
 
-    public Integer getDishListCount(Integer categoryId, Integer examineStatus, Integer pageNum, Integer pageSize) {
-        return dishMapper.getDishListCount(categoryId, examineStatus, (pageNum - 1) * pageSize, pageSize);
+    public Integer getDishListCount(Integer categoryId, Integer examineStatus, Integer pageNum, Integer pageSize,String content) {
+        return dishMapper.getDishListCount(categoryId, examineStatus, (pageNum - 1) * pageSize, pageSize,content);
     }
 
 
-    public List<Dish> getDishList(Integer categoryId, Integer examineStatus, Integer pageNum, Integer pageSize) {
-        return dishMapper.getDishList(categoryId, examineStatus, (pageNum - 1) * pageSize, pageSize);
+    public List<Dish> getDishList(Integer categoryId, Integer examineStatus, Integer pageNum, Integer pageSize,String content) {
+        return dishMapper.getDishList(categoryId, examineStatus, (pageNum - 1) * pageSize, pageSize,content);
     }
 
     public Dish getDishDetail(Integer dishId) {
@@ -63,8 +64,10 @@ public class DishServiceImpl implements DishService {
         Dish dish = JSON.parseObject(dishJson, Dish.class);
         List<DishIngredient> dishIngredientList = JSON.parseArray(dishIngredientJson, DishIngredient.class);
         List<DishStep> dishStepList = JSON.parseArray(dishStepJson, DishStep.class);
+        List<String> categoryIdList = Arrays.asList(dish.getCategoryIds().split(","));
         if (dish.getId() == null) {
             // 新增
+            dish.setExamine_status(1);
             int dishCount = dishMapper.saveDish(dish);
             for (DishIngredient dishIngredient : dishIngredientList) {
                 dishIngredient.setDish_id(dish.getId());
@@ -75,7 +78,8 @@ public class DishServiceImpl implements DishService {
                 dishStepList.get(i).setShow_order(i + 1);
             }
             int dishStepCount = dishMapper.saveDishStep(dishStepList);
-            if (dishCount > 0 && dishIngredientCount > 0 && dishStepCount > 0) {
+            int dishCategoryCount = dishMapper.saveCategory(dish.getId(),categoryIdList);
+            if (dishCount > 0 && dishIngredientCount > 0 && dishStepCount > 0 && dishCategoryCount > 0) {
                 return true;
             } else {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -95,7 +99,9 @@ public class DishServiceImpl implements DishService {
                 dishStepList.get(i).setShow_order(i + 1);
             }
             int dishStepCount = dishMapper.saveDishStep(dishStepList);
-            if (dishCount > 0 && dishIngredientCount > 0 && dishStepCount > 0) {
+            dishMapper.deleteDishCategoryByDishId(dish.getId());
+            int dishCategoryCount = dishMapper.saveCategory(dish.getId(),categoryIdList);
+            if (dishCount > 0 && dishIngredientCount > 0 && dishStepCount > 0 && dishCategoryCount > 0) {
                 return true;
             } else {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

@@ -8,15 +8,13 @@ public class Category {
 
     private String name;
 
-    private Integer parentId;
-
     private Integer orderNum;
 
     private Date createTime;
 
     private Date updateTime;
 
-    private List<Category> childrenCategoryList;
+    private String image;
 
     public Integer getId() {
         return id;
@@ -32,14 +30,6 @@ public class Category {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
-    }
-
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
     }
 
     public Integer getOrderNum() {
@@ -66,11 +56,11 @@ public class Category {
         this.updateTime = updateTime;
     }
 
-    public List<Category> getChildrenCategoryList() {
-        return childrenCategoryList;
+    public String getImage() {
+        return image;
     }
 
-    public void setChildrenCategoryList(List<Category> childrenCategoryList) {
-        this.childrenCategoryList = childrenCategoryList;
+    public void setImage(String image) {
+        this.image = image;
     }
 }

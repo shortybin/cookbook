@@ -24,6 +24,8 @@ public class Dish {
 
     private List<DishStep> dishStepList;
 
+    private String categoryIds;
+
     public Integer getId() {
         return id;
     }
@@ -102,5 +104,13 @@ public class Dish {
 
     public void setDishStepList(List<DishStep> dishStepList) {
         this.dishStepList = dishStepList;
+    }
+
+    public String getCategoryIds() {
+        return categoryIds;
+    }
+
+    public void setCategoryIds(String categoryIds) {
+        this.categoryIds = categoryIds;
     }
 }

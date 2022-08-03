@@ -14,9 +14,13 @@ public interface DishMapper {
 
     List<Dish> randomGetDishList(@Param("startNumber") Integer startNumber, @Param("pageSize") Integer pageSize);
 
-    Integer getDishListCount(@Param("categoryId") Integer categoryId, @Param("examineStatus") Integer examineStatus, @Param("startNumber") Integer startNumber, @Param("pageSize") Integer pageSize);
+    Integer getDishListCount(@Param("categoryId") Integer categoryId, @Param("examineStatus") Integer examineStatus,
+                             @Param("startNumber") Integer startNumber, @Param("pageSize") Integer pageSize,
+                             @Param("content") String content);
 
-    List<Dish> getDishList(@Param("categoryId") Integer categoryId, @Param("examineStatus") Integer examineStatus, @Param("startNumber") Integer startNumber, @Param("pageSize") Integer pageSize);
+    List<Dish> getDishList(@Param("categoryId") Integer categoryId, @Param("examineStatus") Integer examineStatus,
+                           @Param("startNumber") Integer startNumber, @Param("pageSize") Integer pageSize,
+                           @Param("content") String content);
 
     Dish getDishById(@Param("dishId") Integer dishId);
 
@@ -32,9 +36,13 @@ public interface DishMapper {
 
     Integer saveDishStep(@Param("dishStepList") List<DishStep> dishStepList);
 
+    Integer saveCategory(@Param("dishId") Integer dishId,List<String> categoryIdList);
+
     Integer updateDish(Dish dish);
 
     Integer deleteDishIngredientByDishId(@Param("dishId") Integer dishId);
 
     Integer deleteDishStepByDishId(@Param("dishId") Integer dishId);
+
+    Integer deleteDishCategoryByDishId(@Param("dishId") Integer dishId);
 }

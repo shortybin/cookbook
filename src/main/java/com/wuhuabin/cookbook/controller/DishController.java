@@ -113,11 +113,13 @@ public class DishController {
     @PostMapping("/dish/getDishList")
     public ApiRestResponse getDishList(@RequestParam("categoryId") Integer categoryId,
                                        @RequestParam("pageNum") Integer pageNum,
-                                       @RequestParam("pageSize") Integer pageSize) {
-        Integer total = dishService.getDishListCount(categoryId, 2, pageNum, pageSize);
+                                       @RequestParam("pageSize") Integer pageSize,
+                                       @RequestParam("examineStatus") Integer examineStatus,
+                                       @RequestParam("content") String content) {
+        Integer total = dishService.getDishListCount(categoryId, examineStatus, pageNum, pageSize, content);
         List<Dish> dishList = new ArrayList<>();
         if (total > 0) {
-            dishList = dishService.getDishList(categoryId, 2, pageNum, pageSize);
+            dishList = dishService.getDishList(categoryId, examineStatus, pageNum, pageSize, content);
         }
         return ApiRestResponse.success(dishList, total, pageNum, pageSize);
     }
