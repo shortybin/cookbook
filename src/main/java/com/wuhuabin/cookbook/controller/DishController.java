@@ -159,7 +159,7 @@ public class DishController {
                                             @RequestParam("dishStepJson") String dishStepJson) {
         Boolean isSuccess = dishService.saveOrUpdateDish(dishJson, dishIngredientJson, dishStepJson);
         if (isSuccess) {
-            return ApiRestResponse.success();
+            return ApiRestResponse.success("菜谱添加成功");
         }
         return ApiRestResponse.error(0, "保存失败！");
     }
