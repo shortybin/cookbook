@@ -142,7 +142,7 @@ public class DishController {
                                                @RequestParam("examineStatus") Integer examineStatus) {
         Boolean isSuccess = dishService.updateExamineStatus(dishId, examineStatus);
         if (isSuccess) {
-            return ApiRestResponse.success();
+            return ApiRestResponse.success("修改成功");
         }
         return ApiRestResponse.error(0, "更新失败！");
     }
