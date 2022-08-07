@@ -69,4 +69,17 @@ public class UserServiceImpl implements UserService {
             throw new CookBookException(CookBookExceptionEnum.INSERT_FAILED);
         }
     }
+
+    @Override
+    public Integer changeUserName(Integer userId, String userName) {
+        try {
+            User user = new User();
+            user.setUserid(userId);
+            user.setUsername(userName);
+            return userMapper.updateName(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CookBookException(CookBookExceptionEnum.INSERT_FAILED);
+        }
+    }
 }

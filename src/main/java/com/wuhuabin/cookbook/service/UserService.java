@@ -8,4 +8,6 @@ public interface UserService {
     User login(String userName, String password);
 
     Integer changePassword(Integer userId, String password);
+
+    Integer changeUserName(Integer userId, String userName);
 }

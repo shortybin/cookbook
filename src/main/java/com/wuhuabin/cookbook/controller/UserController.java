@@ -71,4 +71,18 @@ public class UserController {
         }
         return ApiRestResponse.error(0, "修改密码失败！");
     }
+
+    @ApiOperation("修改用户名")
+    @PostMapping("/user/changeUserName")
+    public ApiRestResponse changeUserName(@RequestParam("userId") Integer userId,
+                                          @RequestParam("userName") String userName) throws CookBookException {
+        if (!StringUtils.hasText(userName)) {
+            return ApiRestResponse.error(CookBookExceptionEnum.NEED_USER_NAME);
+        }
+        int count = userService.changeUserName(userId, userName);
+        if (count > 0) {
+            return ApiRestResponse.success("用户名修改成功");
+        }
+        return ApiRestResponse.error(0, "修改用户名失败！");
+    }
 }
