@@ -22,7 +22,7 @@
         ORDER BY RAND() limit #{startNumber}, #{pageSize}
     </select>
     <select id="getDishListCount" resultType="java.lang.Integer">
-        select count(1)
+        select count(distinct cbd.id)
         from cook_book_dish cbd
         left join cook_book_dish_category cbdc on cbd.id = cbdc.dish_id
         where 1=1
@@ -37,7 +37,8 @@
         </if>
     </select>
     <select id="getDishList" resultType="com.wuhuabin.cookbook.model.pojo.Dish">
-        select cbd.*
+        select distinct cbd.id,cbd.name,cbd.image,cbd.detail,cbd.create_time,
+        cbd.update_time,cbd.examine_status,cbd.create_id
         from cook_book_dish cbd
         left join cook_book_dish_category cbdc on cbd.id = cbdc.dish_id
         where 1=1

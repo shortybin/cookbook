@@ -63,34 +63,7 @@ public class DishController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //执行到这儿以后，表示，我们已经把文件，存放到指定的位置了；
-        //接下来，就是组织图片的url，返回给前端；
-        try {
-            return ApiRestResponse.success(
-                    getHost(new URI(httpServletRequest.getRequestURL() + "")) +
-                            "/images/" + newFileName);
-        } catch (URISyntaxException e) {
-            //如果上面的过程出现了问题，就抛出文件上传失败异常；
-            return ApiRestResponse.error(CookBookExceptionEnum.UPLOAD_FAILED);
-        }
-    }
-
-    /**
-     * 工具方法：获取图片完整地址中的，URI：
-     * 即通过【"http://127.0.0.1:8083/images/bfe5d66d-98b1-4825-9a86-de8c0741328a.png"】得到【"http://127.0.0.1:8083/"】
-     *
-     * @param uri
-     * @return
-     */
-    private URI getHost(URI uri) {
-        URI effectiveURI;
-        try {
-            effectiveURI = new URI(uri.getScheme(), uri.getUserInfo(), uri.getHost(),
-                    uri.getPort(), null, null, null);
-        } catch (URISyntaxException e) {
-            effectiveURI = null;
-        }
-        return effectiveURI;
+        return ApiRestResponse.success("/images/" + newFileName);
     }
 
     /**
